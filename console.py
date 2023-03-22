@@ -42,7 +42,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, line):
         """Usage: create <class> <key 1>=<value 2> <key 2>=<value 2> ...
-        Create a new class instance with given keys/values and print its id.
+        Create a new class instance.
         """
         try:
             if not line:
@@ -76,11 +76,6 @@ class HBNBCommand(cmd.Cmd):
 
     def do_show(self, line):
         """Prints the string representation of an instance
-        Exceptions:
-            SyntaxError: when there is no args given
-            NameError: when there is no object taht has the name
-            IndexError: when there is no id given
-            KeyError: when there is no valid id given
         """
         try:
             if not line:
@@ -108,10 +103,6 @@ class HBNBCommand(cmd.Cmd):
     def do_destroy(self, line):
         """Deletes an instance based on the class name and id
         Exceptions:
-            SyntaxError: when there is no args given
-            NameError: when there is no object taht has the name
-            IndexError: when there is no id given
-            KeyError: when there is no valid id given
         """
         try:
             if not line:
@@ -159,12 +150,6 @@ class HBNBCommand(cmd.Cmd):
     def do_update(self, line):
         """Updates an instanceby adding or updating attribute
         Exceptions:
-            SyntaxError: when there is no args given
-            NameError: when there is no object taht has the name
-            IndexError: when there is no id given
-            KeyError: when there is no valid id given
-            AttributeError: when there is no attribute given
-            ValueError: when there is no value given
         """
         try:
             if not line:
