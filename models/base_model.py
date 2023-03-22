@@ -1,18 +1,16 @@
 #!/usr/bin/python3
-"""Defines the BaseModel class."""
+""" Defines all common attributes/methods."""
 import models
 from uuid import uuid4
 from datetime import datetime
+from sqlalchemy import Column, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column
-from sqlalchemy import DateTime
-from sqlalchemy import String
 
 Base = declarative_base()
 
 
 class BaseModel:
-    """Defines the BaseModel class.
+    """ Represents the BaseModel of the AirBnB project.
 
     Attributes:
         id (sqlalchemy String): The BaseModel id.
@@ -25,14 +23,16 @@ class BaseModel:
     updated_at = Column(DateTime, nullable=False, default=datetime.utcnow())
 
     def __init__(self, *args, **kwargs):
-        """Initialize a new BaseModel.
+        """
+        Initialize a new BaseModel.
 
         Args:
-            *args (any): Unused.
-            **kwargs (dict): Key/value pairs of attributes.
+            *args (any): Won't be used.
+            **kwargs (dict): Key/Value pairsof the attributes.
         """
         self.id = str(uuid4())
         self.created_at = self.updated_at = datetime.utcnow()
+
         if kwargs:
             for key, value in kwargs.items():
                 if key == "created_at" or key == "updated_at":
@@ -40,31 +40,35 @@ class BaseModel:
                 if key != "__class__":
                     setattr(self, key, value)
 
+    def __str__(self):
+        """ Return the print/str representation the BaseModel instance. """
+        class_name = self.__class__.__name__
+        return "[{}] ({}) {}".format(class_name, self.id, self.__dict__)
+
     def save(self):
-        """Update updated_at with the current datetime."""
+        """
+        Updates the public instance attribute updated_at
+        with the current datetime.
+        """
         self.updated_at = datetime.utcnow()
         models.storage.new(self)
         models.storage.save()
 
     def to_dict(self):
-        """Return a dictionary representation of the BaseModel instance.
-
-        Includes the key/value pair __class__ representing
-        the class name of the object.
         """
-        my_dict = self.__dict__.copy()
-        my_dict["__class__"] = str(type(self).__name__)
-        my_dict["created_at"] = self.created_at.isoformat()
-        my_dict["updated_at"] = self.updated_at.isoformat()
-        my_dict.pop("_sa_instance_state", None)
-        return my_dict
+        Returns a dictionary containing all keys/values of
+        __dict__ of the instance.
+        """
+        rdict = self.__dict__.copy()
+        rdict["__class__"] = str(type(self).__name__)
+        rdict["created_at"] = self.created_at.isoformat()
+        rdict["updated_at"] = self.updated_at.isoformat()
+        rdict.pop("_sa_instance_state", None)
+
+        return rdict
 
     def delete(self):
-        """Delete the current instance from storage."""
+        """ Delete the current instance from the storage (models.storage)
+        by calling the method delete
+        """
         models.storage.delete(self)
-
-    def __str__(self):
-        """Return the print/str representation of the BaseModel instance."""
-        d = self.__dict__.copy()
-        d.pop("_sa_instance_state", None)
-        return "[{}] ({}) {}".format(type(self).__name__, self.id, d)
