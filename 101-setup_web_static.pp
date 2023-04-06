@@ -1,5 +1,5 @@
 # Configures a web server for deployment of web_static.
-# Nginx configuration file
+# Nginx configuration file.
 
 exec { 'apt-get-update':
   command => '/usr/bin/env apt-get -y update',
